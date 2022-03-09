@@ -3,13 +3,16 @@ package com.abc.fundraising.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.abc.fundraising.entity.AdminEntity;
 
 import com.abc.fundraising.model.Admin;
 
+@Component
 public class EntityModelUtil 
 {
-	public static AdminEntity adminModelToEntity(Admin admin)
+	public  AdminEntity adminModelToEntity(Admin admin)
 	{
 		AdminEntity adminEntity = new AdminEntity();
 		
@@ -24,7 +27,7 @@ public class EntityModelUtil
 		
 	}
 	
-	public static Admin adminEntityToModel(AdminEntity adminEntity)
+	public  Admin adminEntityToModel(AdminEntity adminEntity)
 	{
 		Admin admin = new Admin();
 		

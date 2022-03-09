@@ -2,6 +2,7 @@ package com.abc.fundraising.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -20,8 +21,9 @@ import com.abc.fundraising.exception.AdminNotFoundException;
 import com.abc.fundraising.model.Admin;
 import com.abc.fundraising.model.AdminDetails;
 import com.abc.fundraising.repository.AdminRepository;
+import com.abc.fundraising.util.EntityModelUtil;
 
-@SpringBootTest
+@SpringBootTest(classes=AdminServiceTest.class)
 public class AdminServiceTest
 {
 	@InjectMocks
@@ -29,6 +31,9 @@ public class AdminServiceTest
 	
 	@Mock
 	private AdminRepository adminRepository;
+	
+	@Mock
+	private EntityModelUtil entityModelUtil;
 	
 	
 	@Test
@@ -64,29 +69,76 @@ public class AdminServiceTest
 	}
 	
 	@Test
-	void testGetAdminDetails() {
+	public void testGetUserDetails() {
 
-		AdminEntity admin = new AdminEntity();
-		admin.setAdminId(5);
-		admin.setAdminName("Rohit");
-		admin.setCategoryId(654);
-		admin.setDonorId(737);
-		admin.setPostId(929);
-		admin.setUserId(77);
+	AdminEntity admin = new AdminEntity();
+
+	admin.setAdminId(123);
+	admin.setAdminName("PavanKumar");
+	admin.setUserId(55);
+	admin.setPostId(46);
+	admin.setCategoryId(2);
+	admin.setDonorId(75);
+	
+	
+	Admin admin1 = new Admin();
+	
+	admin1.setAdminId(123);
+	admin1.setAdminName("PavanKumar");
+	admin1.setUserId(55);
+	admin1.setPostId(46);
+	admin1.setCategoryId(2);
+	admin1.setDonorId(75);
+
+		when(entityModelUtil.adminModelToEntity(admin1)).thenReturn(admin);
+		when(entityModelUtil.adminEntityToModel(admin)).thenReturn(admin1);
 
 		Optional<AdminEntity> optionalAdmin = Optional.of(admin);
 		int adminId = 1;
 
+		when(entityModelUtil.adminModelToEntity(admin1)).thenReturn(admin);
+		when(entityModelUtil.adminEntityToModel(admin)).thenReturn(admin1);
+
 		when(adminRepository.findById(1)).thenReturn(optionalAdmin);
 
-		Admin existingAdmin = adminService.getAdminDetails(adminId);
+	Admin existingAdmin = adminService.getAdminDetails(adminId);
 
-		assertEquals(admin.getAdminId(), existingAdmin.getAdminId());
-		assertEquals(admin.getAdminName(),existingAdmin.getAdminName());
-		assertEquals(admin.getCategoryId(), existingAdmin.getCategoryId());
-		assertEquals(admin.getDonorId(), existingAdmin.getDonorId());
-		assertEquals(admin.getPostId(), existingAdmin.getPostId());
-		assertEquals(admin.getUserId(),existingAdmin.getUserId());
+		assertEquals(admin.getAdminId(),existingAdmin.getAdminId());
+
+	}	
+	@Test
+	public void testSaveAdmin() {
+
+
+
+	AdminEntity admin = new AdminEntity();
+
+	admin.setAdminId(123);
+	admin.setAdminName("PavanKumar");
+	admin.setUserId(55);
+	admin.setPostId(46);
+	admin.setCategoryId(2);
+	admin.setDonorId(75);
+	
+	
+	Admin admin1 = new Admin();
+	
+	admin1.setAdminId(123);
+	admin1.setAdminName("PavanKumar");
+	admin1.setUserId(55);
+	admin1.setPostId(46);
+	admin1.setCategoryId(2);
+	admin1.setDonorId(75);
+
+
+
+	when(entityModelUtil.adminModelToEntity(admin1)).thenReturn(admin);
+	when(entityModelUtil.adminEntityToModel(admin)).thenReturn(admin1);
+	when(adminRepository.save(admin)).thenReturn(admin);
+
+
+
+	assertEquals(admin1.getAdminName(), admin.getAdminName());
 
 	}
 	

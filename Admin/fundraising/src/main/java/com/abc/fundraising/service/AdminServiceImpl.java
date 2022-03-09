@@ -36,21 +36,49 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private UserService userService;
-
+	
+	@Autowired
+	private EntityModelUtil entityModelUtil;
+	
+	
+	/****************************************************************************************************************************
+	 - Method Name      : saveAdmin
+	 - Input Parameters : int adminId
+	 - Return type      : Admin
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      : Saving the admin information into  the database..
+	  ****************************************************************************************************************************/
 	@Override
 	public Admin saveAdmin(Admin admin) {
 
-		AdminEntity savedAdmin = adminRepository.save(EntityModelUtil.adminModelToEntity(admin));
+		AdminEntity savedAdmin = adminRepository.save(entityModelUtil.adminModelToEntity(admin));
 
-		return EntityModelUtil.adminEntityToModel(savedAdmin);
+		return entityModelUtil.adminEntityToModel(savedAdmin);
 	}
-
+	
+	/****************************************************************************************************************************
+	 - Method Name      : getAllAdmins
+	 - Input Parameters : void
+	 - Return type      : Admin
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      :Get all the admins information entered by adminId from  the database.
+	  ****************************************************************************************************************************/ 
 	@Override
 	public List<Admin> getAllAdmins() {
 		List<AdminEntity> admin = adminRepository.findAll();
 		return EntityModelUtil.adminEntityToModelList(admin);
 	}
-
+	
+	/****************************************************************************************************************************
+	 - Method Name      : getAdminById
+	 - Input Parameters : int adminId
+	 - Return type      : AdminDetails
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      :Get the admin information from  the database by entering adminId.
+	  ****************************************************************************************************************************/ 
 	@Override
 	public AdminDetails getAdminById(int adminId) throws AdminNotFoundException {
 
@@ -62,7 +90,7 @@ public class AdminServiceImpl implements AdminService {
 			throw new AdminNotFoundException("Sorry! Admin is not existing with id: " + adminId);
 		}
 		AdminEntity admin = optionalPost.get();
-		admindetails.setAdmin(EntityModelUtil.adminEntityToModel(admin));
+		admindetails.setAdmin(entityModelUtil.adminEntityToModel(admin));
 		Donor donor = donarService.getDonorDetails(admin.getDonorId());
 		Category category = categoryService.getCategoryDetails(admin.getCategoryId());
 		Post post = postService.getPostDetails(admin.getPostId());
@@ -76,6 +104,16 @@ public class AdminServiceImpl implements AdminService {
 		return admindetails;
 
 	}
+	
+	/****************************************************************************************************************************
+	 - Method Name      : deleteAdmin
+	 - Input Parameters : int adminId
+	 - Return type      : void
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      :Delete the admins information entered by admin from  the database.
+	  ****************************************************************************************************************************/
+	
 
 	@Override
 	public void deleteAdmin(int adminId) {
@@ -88,6 +126,17 @@ public class AdminServiceImpl implements AdminService {
 			throw new AdminNotFoundException("Sorry! Admin is not existing with id: " + adminId);
 		}
 	}
+	
+	/****************************************************************************************************************************
+	 - Method Name      : updateAdmin
+	 - Input Parameters : Admin
+	 - Return type      : Admin
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      :Update the admin information entered by admin from  the database.
+	  ****************************************************************************************************************************/
+	
+	
 
 	@Override
 	public Admin updateAdmin(Admin admin) {
@@ -97,11 +146,21 @@ public class AdminServiceImpl implements AdminService {
 			throw new AdminNotFoundException("Sorry! Admin is not existing with id: " + admin.getAdminId());
 		}
 
-		AdminEntity updatedAdminEntity = adminRepository.save(EntityModelUtil.adminModelToEntity(admin));
+		AdminEntity updatedAdminEntity = adminRepository.save(entityModelUtil.adminModelToEntity(admin));
 		System.out.println("Updated the admin details");
 
-		return EntityModelUtil.adminEntityToModel(updatedAdminEntity);
+		return entityModelUtil.adminEntityToModel(updatedAdminEntity);
 	}
+	
+	/****************************************************************************************************************************
+	 - Method Name      : getUserDetails
+	 - Input Parameters : int userId
+	 - Return type      : User
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      :Get the user information entered by admin from  the database.
+	  ****************************************************************************************************************************/
+	
 
 	public User getUserDetails(int userId) {
 
@@ -110,23 +169,59 @@ public class AdminServiceImpl implements AdminService {
 
 	}
 
+	/****************************************************************************************************************************
+	 - Method Name      : getDonorDetails
+	 - Input Parameters : int donorId
+	 - Return type      : Door
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      :Get the donor information entered by admin from  the database.
+	  ****************************************************************************************************************************/
+	
 	public Donor getDonorDetails(int donorId) {
 
 		Donor donor = donarService.getDonorDetails(donorId);
 		return donor;
 	}
+	
+	/****************************************************************************************************************************
+	 - Method Name      : getPostDetails
+	 - Input Parameters : int postId
+	 - Return type      : Post
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      :Get the Post information entered by admin from  the database.
+	  ****************************************************************************************************************************/
 
 	public Post getPostDetails(int postId) {
 
 		Post post = postService.getPostDetails(postId);
 		return post;
 	}
+	
+	/****************************************************************************************************************************
+	 - Method Name      : getCategotyDetails
+	 - Input Parameters : int categoryId
+	 - Return type      : Category
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      :Get the category information entered by admin from  the database.
+	  ****************************************************************************************************************************/
 
 	@Override
 	public Category getCategotyDetails(int categoryId) {
 		Category category = categoryService.getCategoryDetails(categoryId);
 		return category;
 	}
+	
+	/****************************************************************************************************************************
+	 - Method Name      : getAdminDetails
+	 - Input Parameters : int adminId
+	 - Return type      : Admin
+	 - Author           : Deva Pavan Kumar
+	 - Creation Date    : 07-02-2022
+	 - Description      :Get the admin information from  the database.
+	  ****************************************************************************************************************************/
 
 	@Override
 	public Admin getAdminDetails(int adminId) {
@@ -134,7 +229,7 @@ public class AdminServiceImpl implements AdminService {
 		if(optionalAdminEntity.isEmpty()) {
 			throw new PostNotFoundException("Sorry Admin is not found with id :" +adminId);
 		}
-		return EntityModelUtil.adminEntityToModel(optionalAdminEntity.get());
+		return entityModelUtil.adminEntityToModel(optionalAdminEntity.get());
 	}
 
 }
